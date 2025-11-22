@@ -1,14 +1,21 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-perguntas',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './perguntas.html',
-  styleUrl: './perguntas.css',
+  styleUrls: ['./perguntas.css'],
 })
-
 export class Perguntas {
-  
+  playerName: string | null = null;
+
+  constructor(private router: Router) {
+    const state = this.router.getCurrentNavigation()?.extras?.state as any;
+    this.playerName = state?.player ?? null;
+  }
 }
   
 

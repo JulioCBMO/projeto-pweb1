@@ -1,1 +1,5 @@
-<p>perguntas works!</p>
+<div class="perguntas">
+	<h2>Bem-vindo(a) às perguntas</h2>
+	<p *ngIf="playerName">Jogador: <strong>{{ playerName }}</strong></p>
+	<p *ngIf="!playerName">Nenhum jogador informado. Volte para a tela inicial.</p>
+</div>
