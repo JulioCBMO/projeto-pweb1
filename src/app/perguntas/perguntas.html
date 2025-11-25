@@ -1,5 +1,14 @@
-<div class="perguntas">
-	<h2>Bem-vindo(a) às perguntas</h2>
-	<p *ngIf="playerName">Jogador: <strong>{{ playerName }}</strong></p>
-	<p *ngIf="!playerName">Nenhum jogador informado. Volte para a tela inicial.</p>
+<div class="container">
+  <h2>Pergunta {{ perguntaAtual() + 1 }}</h2>
+
+  <p>{{ perguntas()[perguntaAtual()].texto }}</p>
+
+  <div class="alternativas">
+    <button
+      *ngFor="let alt of perguntas()[perguntaAtual()].alternativas; let i = index"
+      (click)="responder(i)"
+    >
+      {{ alt }}
+    </button>
+  </div>
 </div>
