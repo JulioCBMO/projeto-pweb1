@@ -1,11 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { PerguntasService } from '../services/perguntas.service';
 
 @Component({
   selector: 'app-resultado',
-  imports: [],
+  standalone: true,
   templateUrl: './resultado.html',
-  styleUrl: './resultado.css',
+  styleUrls: ['./resultado.css']
 })
-export class Resultado {
+export class ResultadoComponent {
 
+  service = inject(PerguntasService);
+
+  pontuacao = this.service.pontuacao;
+  total = this.service.perguntas;
 }

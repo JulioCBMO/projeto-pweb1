@@ -20,16 +20,24 @@ export class PerguntasService {
 
   perguntaAtual = signal(0);
   acertos = signal(0);
+  pontuacao = signal(0);
 
   constructor() {}
 
-  responder(indice: number) {
-    const atual = this.perguntas()[this.perguntaAtual()];
+ responder(indice: number) {
+  const atual = this.perguntaAtual();
+  const pergunta = this.perguntas()[atual];
 
-    if (indice === atual.correta) {
-      this.acertos.update(v => v + 1);
-    }
+  if (indice === pergunta.correta) {
+    this.pontuacao.set(this.pontuacao() + 1);
+  }
 
-    this.perguntaAtual.update(v => v + 1);
+  const proxima = atual + 1;
+
+  if (proxima < this.perguntas().length) {
+    this.perguntaAtual.set(proxima);
+  } else {
+    // acabou! vai para a tela de resultado
+    this.router.navigate(['/resultado']);
   }
 }

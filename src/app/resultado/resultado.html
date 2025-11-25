@@ -1,18 +1,12 @@
-<h1>Resultado</h1>
+<div class="container">
+  <h2>Resultado do Quiz</h2>
 
-<p>Pontuação: </p>
+  <p>
+    Você acertou <strong>{{ pontuacao() }}</strong>
+    de <strong>{{ total().length }}</strong> perguntas.
+  </p>
 
-<h2>Suas respostas:</h2>
-
-<ul>
-  
-    <li>
-      <strong> pergunta </strong><br>
-
-      Sua resposta: <br>
-      Correta: 
-    </li>
-  
-</ul>
-
-<a>Jogar novamente</a>
+  <a routerLink="/">
+    <button>Voltar ao início</button>
+  </a>
+</div>
