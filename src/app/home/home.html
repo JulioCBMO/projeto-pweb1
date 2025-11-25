@@ -10,6 +10,9 @@
         <small *ngIf="form.get('player')?.errors?.['minlength']">Digite pelo menos 2 caracteres.</small>
       </div>
     </div>
+<a routerLink="/perguntas">
+  <button>Começar Quiz</button>
+</a>
 
     <div class="actions">
       <button type="submit" [disabled]="form.invalid">Iniciar Quiz</button>
