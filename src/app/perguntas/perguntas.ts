@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { PerguntasService } from '../services/perguntas.service';
-
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-perguntas',
   standalone: true,
