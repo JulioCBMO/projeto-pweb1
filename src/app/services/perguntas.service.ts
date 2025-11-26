@@ -22,8 +22,11 @@ export class PerguntasService {
   async loadFromAssets(): Promise<void> {
     if (this.perguntas().length) return;
     this.carregando.set(true);
+
     try {
-      const data = await firstValueFrom(this.http.get<Pergunta[]>('/assets/questions.json'));
+      const data = await firstValueFrom(
+        this.http.get<Pergunta[]>('/assets/questions.json')
+      );
       this.perguntas.set(data || []);
     } catch (err) {
       this.perguntas.set([]);
@@ -41,14 +44,23 @@ export class PerguntasService {
   responder(indice: number) {
     const idx = this.perguntaAtual();
     const lista = this.perguntas();
+
     if (!lista || !lista[idx]) return;
 
     const correta = lista[idx].correta;
+
     if (indice === correta) {
       this.pontuacao.update(v => v + 1);
     }
 
-    const proxima = idx + 1;
+    this.proximaPergunta();
+  }
+
+  proximaPergunta() {
+    const atual = this.perguntaAtual();
+    const lista = this.perguntas();
+    const proxima = atual + 1;
+
     if (proxima < lista.length) {
       this.perguntaAtual.set(proxima);
     } else {

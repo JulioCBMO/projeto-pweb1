@@ -3,6 +3,7 @@
     <div class="quiz-card">
       <h2>PERGUNTA {{ service.perguntaAtual() + 1 }}</h2>
 
+<<<<<<< HEAD
       @if (perguntaAtual()?.imagem) {
         <img 
           [src]="perguntaAtual()?.imagem" 
@@ -33,3 +34,38 @@
     </div>
   }
 </div>
+=======
+  <div class="quiz-card" *ngIf="pergunta">
+    <h2>Pergunta {{ service.perguntaAtual() + 1 }}</h2>
+
+    <!-- IMAGEM DA PERGUNTA (SE EXISTIR) -->
+    <img
+      *ngIf="pergunta.imagem"
+      [src]="pergunta.imagem"
+      alt="Imagem da pergunta"
+      class="imagem-pergunta"
+    />
+
+    <!-- TEXTO DA PERGUNTA -->
+    <p class="texto">{{ pergunta.texto }}</p>
+
+    <!-- LISTA DE ALTERNATIVAS -->
+    <div class="alternativas">
+      <button
+        *ngFor="let alt of pergunta.alternativas; let i = index"
+        (click)="escolherAlternativa(i)"
+        [class.correta]="selecionada() !== null && i === correta()"
+        [class.errada]="
+          selecionada() !== null &&
+          i === selecionada() &&
+          selecionada() !== correta()
+        "
+        [disabled]="selecionada() !== null"
+      >
+        {{ alt }}
+      </button>
+    </div>
+  </div>
+
+</div>
+>>>>>>> 91ccc8f1b6ffcb2c081db2e6f0835233c701e276
