@@ -1,21 +1,18 @@
-<div class="home-container">
-  <h1>Quiz</h1>
+<div class="container">
+  <div class="card">
+    <h1 class="title">Quiz Game</h1>
 
-  <form [formGroup]="form" (ngSubmit)="start()" novalidate>
-    <div class="field">
-      <label for="player">Seu nome</label>
-      <input id="player" formControlName="player" placeholder="Digite seu nome" />
-      <div class="error" *ngIf="form.get('player')?.touched && form.get('player')?.invalid">
-        <small *ngIf="form.get('player')?.errors?.['required']">O nome é obrigatório.</small>
-        <small *ngIf="form.get('player')?.errors?.['minlength']">Digite pelo menos 2 caracteres.</small>
-      </div>
-    </div>
-<a routerLink="/perguntas">
-  <button>Começar Quiz</button>
-</a>
+    <form [formGroup]="form" (ngSubmit)="start()">
+      <input
+        type="text"
+        placeholder="Digite seu nome..."
+        formControlName="player"
+        class="input"
+      />
 
-    <div class="actions">
-      <button type="submit" [disabled]="form.invalid">Iniciar Quiz</button>
-    </div>
-  </form>
+      <button class="btn" type="submit">
+        Começar
+      </button>
+    </form>
+  </div>
 </div>
