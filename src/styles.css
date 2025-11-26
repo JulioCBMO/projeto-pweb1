@@ -1,1 +1,40 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+
+:root {
+  /* Paleta de Cores Neon/Dark */
+  --bg-gradient-start: #1a1a2e;
+  --bg-gradient-end: #16213e;
+  --primary: #0f3460;
+  --accent: #e94560; /* Rosa Neon */
+  --text-color: #ffffff;
+  
+  /* Cores das Alternativas (Kahoot Style) */
+  --alt-1: #ff4757; /* Vermelho */
+  --alt-2: #2e86de; /* Azul */
+  --alt-3: #ffa502; /* Amarelo/Laranja */
+  --alt-4: #2ed573; /* Verde */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+  color: var(--text-color);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* Evita barras de rolagem indesejadas */
+}
+
+button {
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  border: none;
+  outline: none;
+}

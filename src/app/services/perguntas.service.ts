@@ -1,15 +1,8 @@
-// src/app/services/perguntas.service.ts
 import { Injectable, signal, WritableSignal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { Router } from '@angular/router';
-
-export interface Pergunta {
-  texto: string;
-  alternativas: string[];
-  correta: number;
-  imagem?: string | null;
-}
+import { Pergunta } from '../models/pergunta.model'; // Certifique-se que o caminho está certo
 
 @Injectable({
   providedIn: 'root'
@@ -24,13 +17,17 @@ export class PerguntasService {
   // carregamento em andamento
   carregando = signal(false);
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router) {
+    // CARREGA AS PERGUNTAS ASSIM QUE O SERVIÇO INICIA
+    this.loadFromAssets();
+  }
 
   async loadFromAssets(): Promise<void> {
     if (this.perguntas().length) return; // já carregado
     this.carregando.set(true);
     try {
-      const data = await firstValueFrom(this.http.get<Pergunta[]>('/assets/questions.json'));
+      // Ajuste o caminho se necessário. Se o arquivo está em src/assets/questions.json:
+      const data = await firstValueFrom(this.http.get<Pergunta[]>('assets/questions.json'));
       this.perguntas.set(data || []);
     } catch (err) {
       console.error('Erro ao carregar perguntas', err);
@@ -46,7 +43,7 @@ export class PerguntasService {
     this.perguntaAtual.set(0);
   }
 
-  // indice: índice da alternativa escolhida; -1 significa "nenhuma"/timeout/skip
+  // indice: índice da alternativa escolhida
   responder(indice: number) {
     const idx = this.perguntaAtual();
     const lista = this.perguntas();
@@ -62,7 +59,6 @@ export class PerguntasService {
       this.perguntaAtual.set(proxima);
     } else {
       // fim do quiz
-      // navegue para resultado
       this.router.navigate(['/resultado']);
     }
   }

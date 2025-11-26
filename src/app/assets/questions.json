@@ -16,8 +16,8 @@
     "alternativas": ["Toronto", "Vancouver", "Montreal", "Ottawa"],
     "correta": 3,
     "imagem": null
-  },{
-  
+  },
+  {
     "texto": "Qual seleção venceu a Copa do Mundo de 2014?",
     "alternativas": ["Argentina", "Alemanha", "Brasil", "Espanha"],
     "correta": 1,
@@ -41,5 +41,4 @@
     "correta": 2,
     "imagem": null
   }
-
 ]
