@@ -1,130 +1,56 @@
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  max-width: 900px; /* Um pouco mais largo para o grid ficar bom */
-  margin: 0 auto;
-  padding: 20px;
-  flex-direction: column;
-}
 
-.quiz-card {
-  width: 100%;
-  text-align: center;
-}
 
-h2 {
-  font-size: 1.5rem;
-  color: #8e9aaf;
-  margin-bottom: 15px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
 
-.imagem-pergunta {
-  width: 100%;
-  max-height: 300px;
-  object-fit: contain; /* Garante que a imagem não corte */
-  background-color: rgba(0,0,0,0.3);
-  border-radius: 15px;
-  margin-bottom: 25px;
-  border: 2px solid rgba(255,255,255,0.1);
-}
-
-.texto {
-  font-size: 1.8rem;
-  font-weight: 700;
-  margin-bottom: 30px;
-  color: #fff;
-  background: rgba(255,255,255,0.05);
-  padding: 25px;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-}
-
-/* --- O GRID MÁGICO ESTILO KAHOOT --- */
-.alternativas {
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* 2 colunas de tamanho igual */
-  gap: 20px;
-  width: 100%;
-}
-
-.alternativas button {
-  padding: 20px;
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: white;
-  border-radius: 12px;
-  transition: all 0.2s;
-  box-shadow: 0 6px 0 rgba(0,0,0,0.2); /* Efeito 3D */
-  min-height: 120px; /* Garante que os botões tenham altura boa */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-}
-
-/* Cores diferentes para cada posição */
-.alternativas button:nth-child(1) { background-color: var(--alt-1); box-shadow: 0 6px 0 #c0392b; }
-.alternativas button:nth-child(2) { background-color: var(--alt-2); box-shadow: 0 6px 0 #2980b9; }
-.alternativas button:nth-child(3) { background-color: var(--alt-3); box-shadow: 0 6px 0 #d35400; }
-.alternativas button:nth-child(4) { background-color: var(--alt-4); box-shadow: 0 6px 0 #27ae60; }
-
-/* Efeito Hover */
-.alternativas button:hover:not(:disabled) {
-  transform: translateY(-4px);
-  filter: brightness(1.1);
-}
-
-/* Efeito Click */
-.alternativas button:active:not(:disabled) {
-  transform: translateY(4px);
-  box-shadow: none !important;
-}
-
-/* --- FEEDBACK VISUAL --- */
-button:disabled {
-  cursor: default;
-  opacity: 0.3; /* Deixa as não escolhidas transparentes */
+.inativo {
+  opacity: 0.4 !important;
   transform: scale(0.95);
-  box-shadow: none !important;
 }
 
-/* Classe .correta (Verde brilhante) */
+/* ACERTOU: Fica verde e dá um "pulo" */
 .alternativas button.correta {
-  background-color: #00b894 !important;
-  box-shadow: 0 0 30px #00b894, 0 6px 0 #008f72 !important;
+  background-color: #00b894 !important; /* Verde Neon */
+  color: white;
+  box-shadow: 0 0 25px #00b894, 0 5px 0 #006d57;
+  border: 2px solid #fff;
   opacity: 1 !important;
-  transform: scale(1.05) !important;
   z-index: 10;
-  border: 2px solid white;
+  animation: popSuccess 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
-/* Classe .errada (Vermelho/Cinza apagado) */
+/* ERROU: Fica vermelho e treme */
 .alternativas button.errada {
-  background-color: #636e72 !important; /* Cinza escuro para erro */
-  box-shadow: none !important;
+  background-color: #d63031 !important; /* Vermelho Neon */
+  color: white;
   opacity: 1 !important;
-  animation: shake 0.5s;
+  box-shadow: 0 0 15px #d63031;
+  animation: shakeError 0.4s ease-in-out;
 }
 
-/* Responsividade: No celular vira lista vertical */
-@media (max-width: 700px) {
-  .alternativas {
-    grid-template-columns: 1fr; /* 1 coluna */
-  }
-  .texto {
-    font-size: 1.4rem;
-  }
-  .btn {
-    min-height: 80px;
-  }
+/* Loading */
+.loading {
+  color: white;
+  font-size: 1.5rem;
+  animation: pulse 1s infinite;
 }
 
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-8px); }
-  75% { transform: translateX(8px); }
+/* --- KEYFRAMES (Animações) --- */
+
+@keyframes popSuccess {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1.05); }
+}
+
+@keyframes shakeError {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  50% { transform: translateX(10px); }
+  75% { transform: translateX(-10px); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes pulse {
+  0% { opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { opacity: 0.5; }
 }

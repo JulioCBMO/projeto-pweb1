@@ -1,32 +1,35 @@
 <div class="container">
+  @if (perguntaAtual()) {
+    <div class="quiz-card">
+      <h2>PERGUNTA {{ service.perguntaAtual() + 1 }}</h2>
 
-  <div class="quiz-card">
-    <h2>Pergunta {{ service.perguntaAtual() + 1 }}</h2>
+      @if (perguntaAtual()?.imagem) {
+        <img 
+          [src]="perguntaAtual()?.imagem" 
+          alt="Imagem da pergunta" 
+          class="imagem-pergunta"
+        />
+      }
 
-    <!-- IMAGEM (se existir) -->
-    <img
-      *ngIf="perguntaAtual()?.imagem"
-      [src]="perguntaAtual().imagem"
-      alt="Imagem da pergunta"
-      class="imagem-pergunta"
-    />
+      <p class="texto">{{ perguntaAtual()?.texto }}</p>
 
-    <!-- TEXTO DA PERGUNTA -->
-    <p class="texto">{{ perguntaAtual()?.texto }}</p>
-
-    <!-- LISTA DE ALTERNATIVAS -->
-    <div class="alternativas">
-      <button
-        *ngFor="let alt of perguntaAtual()?.alternativas; let i = index"
-        (click)="escolherAlternativa(i)"
-        [class.correta]="selecionada !== null && i === correta"
-        [class.errada]="selecionada !== null && i === selecionada && selecionada !== correta"
-        [disabled]="selecionada !== null"
-      >
-        {{ alt }}
-      </button>
+      <div class="alternativas">
+        @for (alt of perguntaAtual()?.alternativas; track $index) {
+          <button
+            (click)="escolherAlternativa($index)"
+            [class.correta]="selecionada !== null && $index === correta"
+            [class.errada]="selecionada !== null && $index === selecionada && selecionada !== correta"
+            [class.inativo]="selecionada !== null && $index !== selecionada && $index !== correta"
+            [disabled]="selecionada !== null"
+          >
+            {{ alt }}
+          </button>
+        }
+      </div>
     </div>
-
-  </div>
-
+  } @else {
+    <div class="loading">
+      <p>Carregando desafio...</p>
+    </div>
+  }
 </div>
