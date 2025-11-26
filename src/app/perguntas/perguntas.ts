@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PerguntasService } from '../services/perguntas.service';
 
@@ -10,30 +10,28 @@ import { PerguntasService } from '../services/perguntas.service';
   styleUrls: ['./perguntas.css'],
 })
 export class PerguntasComponent {
-  service = inject(PerguntasService);
+  selecionada = signal<number | null>(null);
+  correta = signal<number | null>(null);
 
-  perguntaAtual = computed(() => {
+  constructor(public service: PerguntasService) {}
+
+  // Getter seguro para evitar erros de undefined
+  get pergunta() {
     const lista = this.service.perguntas();
-    const idx = this.service.perguntaAtual();
-    return lista[idx];
-  });
+    const index = this.service.perguntaAtual();
+    return lista && lista[index] ? lista[index] : null;
+  }
 
-  selecionada: number | null = null;
-  correta: number | null = null;
+  escolherAlternativa(index: number) {
+    if (!this.pergunta) return;
 
-  escolherAlternativa(i: number) {
-    if (this.selecionada !== null) return; // impede clicar mais de uma vez
+    this.selecionada.set(index);
+    this.correta.set(this.pergunta.correta);
 
-    this.selecionada = i;
-    this.correta = this.perguntaAtual().correta;
-
-    this.service.responder(i);
-
-    // espera 1.2s para ir à próxima
     setTimeout(() => {
-      this.selecionada = null;
-      this.correta = null;
-    }, 1200);
+      this.service.proximaPergunta();
+      this.selecionada.set(null);
+      this.correta.set(null);
+    }, 1000);
   }
 }
-

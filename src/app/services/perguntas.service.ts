@@ -1,4 +1,3 @@
-// src/app/services/perguntas.service.ts
 import { Injectable, signal, WritableSignal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
@@ -15,22 +14,23 @@ export interface Pergunta {
   providedIn: 'root'
 })
 export class PerguntasService {
-  // signals
   perguntas: WritableSignal<Pergunta[]> = signal([]);
   perguntaAtual: WritableSignal<number> = signal(0);
   pontuacao: WritableSignal<number> = signal(0);
   jogador: WritableSignal<string | null> = signal(null);
 
-  // carregamento em andamento
   carregando = signal(false);
 
   constructor(private http: HttpClient, private router: Router) {}
 
   async loadFromAssets(): Promise<void> {
-    if (this.perguntas().length) return; // já carregado
+    if (this.perguntas().length) return;
     this.carregando.set(true);
+
     try {
-      const data = await firstValueFrom(this.http.get<Pergunta[]>('/assets/questions.json'));
+      const data = await firstValueFrom(
+        this.http.get<Pergunta[]>('/assets/questions.json')
+      );
       this.perguntas.set(data || []);
     } catch (err) {
       console.error('Erro ao carregar perguntas', err);
@@ -46,23 +46,29 @@ export class PerguntasService {
     this.perguntaAtual.set(0);
   }
 
-  // indice: índice da alternativa escolhida; -1 significa "nenhuma"/timeout/skip
   responder(indice: number) {
     const idx = this.perguntaAtual();
     const lista = this.perguntas();
+
     if (!lista || !lista[idx]) return;
 
     const correta = lista[idx].correta;
+
     if (indice === correta) {
       this.pontuacao.update(v => v + 1);
     }
 
-    const proxima = idx + 1;
+    this.proximaPergunta();
+  }
+
+  proximaPergunta() {
+    const atual = this.perguntaAtual();
+    const lista = this.perguntas();
+    const proxima = atual + 1;
+
     if (proxima < lista.length) {
       this.perguntaAtual.set(proxima);
     } else {
-      // fim do quiz
-      // navegue para resultado
       this.router.navigate(['/resultado']);
     }
   }

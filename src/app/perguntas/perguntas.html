@@ -1,32 +1,35 @@
 <div class="container">
 
-  <div class="quiz-card">
+  <div class="quiz-card" *ngIf="pergunta">
     <h2>Pergunta {{ service.perguntaAtual() + 1 }}</h2>
 
-    <!-- IMAGEM (se existir) -->
+    <!-- IMAGEM DA PERGUNTA (SE EXISTIR) -->
     <img
-      *ngIf="perguntaAtual()?.imagem"
-      [src]="perguntaAtual().imagem"
+      *ngIf="pergunta.imagem"
+      [src]="pergunta.imagem"
       alt="Imagem da pergunta"
       class="imagem-pergunta"
     />
 
     <!-- TEXTO DA PERGUNTA -->
-    <p class="texto">{{ perguntaAtual()?.texto }}</p>
+    <p class="texto">{{ pergunta.texto }}</p>
 
     <!-- LISTA DE ALTERNATIVAS -->
     <div class="alternativas">
       <button
-        *ngFor="let alt of perguntaAtual()?.alternativas; let i = index"
+        *ngFor="let alt of pergunta.alternativas; let i = index"
         (click)="escolherAlternativa(i)"
-        [class.correta]="selecionada !== null && i === correta"
-        [class.errada]="selecionada !== null && i === selecionada && selecionada !== correta"
-        [disabled]="selecionada !== null"
+        [class.correta]="selecionada() !== null && i === correta()"
+        [class.errada]="
+          selecionada() !== null &&
+          i === selecionada() &&
+          selecionada() !== correta()
+        "
+        [disabled]="selecionada() !== null"
       >
         {{ alt }}
       </button>
     </div>
-
   </div>
 
 </div>
