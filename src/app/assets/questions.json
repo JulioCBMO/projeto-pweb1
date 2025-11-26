@@ -1,0 +1,45 @@
+[
+  {
+    "texto": "Qual jogador marcou mais gols na história das Copas do Mundo?",
+    "alternativas": ["Pelé", "Miroslav Klose", "Ronaldo Fenômeno", "Gerd Müller"],
+    "correta": 1,
+    "imagem": null
+  },
+  {
+    "texto": "Qual país sediou a primeira Copa do Mundo em 1930?",
+    "alternativas": ["Brasil", "Itália", "Uruguai", "França"],
+    "correta": 2,
+    "imagem": null
+  },
+  {
+    "texto": "Qual a capital do Canadá?",
+    "alternativas": ["Toronto", "Vancouver", "Montreal", "Ottawa"],
+    "correta": 3,
+    "imagem": null
+  },{
+  
+    "texto": "Qual seleção venceu a Copa do Mundo de 2014?",
+    "alternativas": ["Argentina", "Alemanha", "Brasil", "Espanha"],
+    "correta": 1,
+    "imagem": null
+  },
+  {
+    "texto": "Qual é o recordista de prêmios Bola de Ouro (Ballon d'Or)?",
+    "alternativas": ["Cristiano Ronaldo", "Lionel Messi", "Pelé", "Johan Cruyff"],
+    "correta": 1,
+    "imagem": null
+  },
+  {
+    "texto": "Qual é o ponto mais alto da Terra acima do nível do mar?",
+    "alternativas": ["Monte Kilimanjaro", "Monte Everest", "K2", "Monte McKinley"],
+    "correta": 1,
+    "imagem": null
+  },
+  {
+    "texto": "Qual é o menor país do mundo em área territorial?",
+    "alternativas": ["Mônaco", "Nauru", "Vaticano", "San Marino"],
+    "correta": 2,
+    "imagem": null
+  }
+
+]
