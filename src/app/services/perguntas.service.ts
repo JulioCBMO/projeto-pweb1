@@ -1,8 +1,8 @@
+// src/app/services/perguntas.service.ts
 import { Injectable, signal, WritableSignal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { firstValueFrom } from 'rxjs';
 import { Router } from '@angular/router';
 import { Pergunta } from '../models/pergunta.model';
+import { supabase } from '../config/supabase.config';
 
 @Injectable({
   providedIn: 'root'
@@ -15,34 +15,70 @@ export class PerguntasService {
 
   carregando = signal(false);
 
-  constructor(private http: HttpClient, private router: Router) {
-    console.log('Serviço iniciado. Tentando carregar perguntas...');
-    this.loadFromAssets();
+  constructor(private router: Router) {
+    console.log('Serviço iniciado. Tentando carregar perguntas do Supabase...');
+    this.loadFromSupabase();
   }
 
-  async loadFromAssets(): Promise<void> {
+  /**
+   * Carrega perguntas do Supabase
+   */
+  async loadFromSupabase(): Promise<void> {
     if (this.perguntas().length > 0) return;
     
     this.carregando.set(true);
     
     try {
-      // Adicionei a barra '/' no inicio para garantir a raiz
-      const url = '/questions.json'; 
-      console.log('Buscando em:', url);
+      console.log('Buscando perguntas no Supabase...');
 
-      const data = await firstValueFrom(this.http.get<Pergunta[]>(url));
-      
+      // Faz a consulta na tabela 'perguntas'
+      const { data, error } = await supabase
+        .from('perguntas')
+        .select('*')
+        .order('id', { ascending: true });
+
+      if (error) {
+        console.error('Erro do Supabase:', error);
+        throw error;
+      }
+
       console.log('Sucesso! Perguntas carregadas:', data);
       this.perguntas.set(data || []);
       
     } catch (err) {
-      console.error('ERRO CRÍTICO AO CARREGAR JSON:', err);
-      // Mantém vazio para a tela mostrar o erro se necessário
+      console.error('ERRO CRÍTICO AO CARREGAR DO SUPABASE:', err);
       this.perguntas.set([]); 
     } finally {
       this.carregando.set(false);
     }
   }
+
+  /**
+   * Método alternativo: carregar perguntas aleatórias
+   */
+  async loadRandomQuestions(limit: number = 10): Promise<void> {
+    this.carregando.set(true);
+    
+    try {
+      const { data, error } = await supabase
+        .from('perguntas')
+        .select('*')
+        .limit(limit);
+
+      if (error) throw error;
+
+      // Embaralha as perguntas
+      const shuffled = data?.sort(() => Math.random() - 0.5) || [];
+      this.perguntas.set(shuffled);
+      
+    } catch (err) {
+      console.error('Erro ao carregar perguntas aleatórias:', err);
+      this.perguntas.set([]);
+    } finally {
+      this.carregando.set(false);
+    }
+  }
+
 
   iniciar(jogadorNome?: string) {
     if (jogadorNome) this.jogador.set(jogadorNome);

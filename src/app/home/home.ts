@@ -17,7 +17,7 @@ export class Home {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private perguntasService: PerguntasService // <--- ADICIONE ESTA LINHA (com 'private')
+    private perguntasService: PerguntasService 
   ) {
     this.form = this.fb.group({
       player: ['', [
@@ -28,15 +28,11 @@ export class Home {
     });
   }
 
-  /**
-   * Validador customizado para rejeitar caracteres especiais
-   * Aceita apenas: letras (a-z, A-Z), números (0-9) e espaços
-   */
   noSpecialCharactersValidator() {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = control.value;
       if (!value) {
-        return null; // Deixa para Validators.required verificar
+        return null;
       }
       // Regex: permite apenas letras (maiúsculas e minúsculas), números e espaços
       const pattern = /^[a-zA-Z0-9\s]*$/;
@@ -51,7 +47,6 @@ export class Home {
     if (this.form.valid) {
       const name = this.form.value.player;
       
-      // Agora isso vai funcionar, pois injetamos no construtor acima
       this.perguntasService.iniciar(name);
       
       this.router.navigate(['/perguntas']);
