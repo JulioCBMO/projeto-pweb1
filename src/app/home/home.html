@@ -10,7 +10,20 @@
         class="input"
       />
 
-      <button class="btn" type="submit">
+      <!-- Mensagens de erro de validação -->
+      <div class="error-messages" *ngIf="form.get('player')?.touched && form.get('player')?.invalid">
+        <div class="error" *ngIf="form.get('player')?.errors?.['required']">
+          ⚠️ O nome é obrigatório.
+        </div>
+        <div class="error" *ngIf="form.get('player')?.errors?.['minlength']">
+          ⚠️ O nome deve ter no mínimo 2 letras.
+        </div>
+        <div class="error" *ngIf="form.get('player')?.errors?.['specialCharacters']">
+          ⚠️ O nome não pode conter caracteres especiais (!@#$%^&*...).
+        </div>
+      </div>
+
+      <button class="btn" type="submit" [disabled]="form.invalid">
         COMEÇAR
       </button>
     </form>

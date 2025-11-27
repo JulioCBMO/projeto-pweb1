@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { PerguntasService } from '../services/perguntas.service'; // <--- Importação essencial
@@ -20,8 +20,31 @@ export class Home {
     private perguntasService: PerguntasService // <--- ADICIONE ESTA LINHA (com 'private')
   ) {
     this.form = this.fb.group({
-      player: ['', [Validators.required, Validators.minLength(2)]]
+      player: ['', [
+        Validators.required,
+        Validators.minLength(2),
+        this.noSpecialCharactersValidator()
+      ]]
     });
+  }
+
+  /**
+   * Validador customizado para rejeitar caracteres especiais
+   * Aceita apenas: letras (a-z, A-Z), números (0-9) e espaços
+   */
+  noSpecialCharactersValidator() {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value;
+      if (!value) {
+        return null; // Deixa para Validators.required verificar
+      }
+      // Regex: permite apenas letras (maiúsculas e minúsculas), números e espaços
+      const pattern = /^[a-zA-Z0-9\s]*$/;
+      if (!pattern.test(value)) {
+        return { specialCharacters: true };
+      }
+      return null;
+    };
   }
 
   start() {
