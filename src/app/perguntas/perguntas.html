@@ -1,9 +1,9 @@
 <div class="container">
-  @if (perguntaAtual()) {
+  @if (service.perguntas().length > 0) {
+    
     <div class="quiz-card">
-      <h2>PERGUNTA {{ service.perguntaAtual() + 1 }}</h2>
+      <h2>PERGUNTA {{ service.perguntaAtual() + 1 }} / {{ service.perguntas().length }}</h2>
 
-<<<<<<< HEAD
       @if (perguntaAtual()?.imagem) {
         <img 
           [src]="perguntaAtual()?.imagem" 
@@ -28,44 +28,15 @@
         }
       </div>
     </div>
+
   } @else {
     <div class="loading">
-      <p>Carregando desafio...</p>
+      <p>Carregando perguntas...</p>
+      @if (!service.carregando() && service.perguntas().length === 0) {
+        <p style="font-size: 0.8rem; color: #ff4757; margin-top: 10px;">
+          Erro: Nenhuma pergunta encontrada. Verifique o arquivo JSON.
+        </p>
+      }
     </div>
   }
 </div>
-=======
-  <div class="quiz-card" *ngIf="pergunta">
-    <h2>Pergunta {{ service.perguntaAtual() + 1 }}</h2>
-
-    <!-- IMAGEM DA PERGUNTA (SE EXISTIR) -->
-    <img
-      *ngIf="pergunta.imagem"
-      [src]="pergunta.imagem"
-      alt="Imagem da pergunta"
-      class="imagem-pergunta"
-    />
-
-    <!-- TEXTO DA PERGUNTA -->
-    <p class="texto">{{ pergunta.texto }}</p>
-
-    <!-- LISTA DE ALTERNATIVAS -->
-    <div class="alternativas">
-      <button
-        *ngFor="let alt of pergunta.alternativas; let i = index"
-        (click)="escolherAlternativa(i)"
-        [class.correta]="selecionada() !== null && i === correta()"
-        [class.errada]="
-          selecionada() !== null &&
-          i === selecionada() &&
-          selecionada() !== correta()
-        "
-        [disabled]="selecionada() !== null"
-      >
-        {{ alt }}
-      </button>
-    </div>
-  </div>
-
-</div>
->>>>>>> 91ccc8f1b6ffcb2c081db2e6f0835233c701e276
