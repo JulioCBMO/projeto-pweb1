@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { PerguntasService } from '../services/perguntas.service'; // <--- Importação essencial
 
 @Component({
   selector: 'app-home',
@@ -15,7 +16,8 @@ export class Home {
 
   constructor(
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private perguntasService: PerguntasService // <--- ADICIONE ESTA LINHA (com 'private')
   ) {
     this.form = this.fb.group({
       player: ['', [Validators.required, Validators.minLength(2)]]
@@ -25,7 +27,11 @@ export class Home {
   start() {
     if (this.form.valid) {
       const name = this.form.value.player;
-      this.router.navigate(['/perguntas'], { state: { player: name } });
+      
+      // Agora isso vai funcionar, pois injetamos no construtor acima
+      this.perguntasService.iniciar(name);
+      
+      this.router.navigate(['/perguntas']);
     } else {
       this.form.markAllAsTouched();
     }

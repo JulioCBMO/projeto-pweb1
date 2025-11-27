@@ -1,3 +1,5 @@
+/* src/app/perguntas/perguntas.css */
+
 .container {
   display: flex;
   justify-content: center;
@@ -43,10 +45,10 @@ h2 {
   box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
-/* --- O GRID MÁGICO (2x2) --- */
+/* --- GRID 2x2 --- */
 .alternativas {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* Cria 2 colunas iguais */
+  grid-template-columns: 1fr 1fr; /* DUAS COLUNAS */
   gap: 20px;
   width: 100%;
 }
@@ -59,44 +61,44 @@ h2 {
   border-radius: 12px;
   transition: all 0.2s;
   box-shadow: 0 6px 0 rgba(0,0,0,0.2);
-  min-height: 120px;
+  min-height: 120px; /* Altura mínima para ficarem quadrados */
   display: flex;
   align-items: center;
   justify-content: center;
+  border: none;
+  cursor: pointer;
   text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
 }
 
-/* CORES VIBRANTES (Estilo Kahoot) */
+/* CORES */
 .alternativas button:nth-child(1) { background-color: #ff4757; box-shadow: 0 6px 0 #c0392b; }
 .alternativas button:nth-child(2) { background-color: #2e86de; box-shadow: 0 6px 0 #2980b9; }
 .alternativas button:nth-child(3) { background-color: #ffa502; box-shadow: 0 6px 0 #d35400; }
 .alternativas button:nth-child(4) { background-color: #2ed573; box-shadow: 0 6px 0 #27ae60; }
 
-/* Efeito Hover */
+/* FEEDBACK */
 .alternativas button:hover:not(:disabled) {
   transform: translateY(-4px);
   filter: brightness(1.1);
 }
 
-/* Efeito Click */
 .alternativas button:active:not(:disabled) {
   transform: translateY(4px);
   box-shadow: none !important;
 }
 
-/* --- FEEDBACK (Acerto/Erro) --- */
 button:disabled {
   cursor: default;
 }
 
 .inativo {
-  opacity: 0.3; /* Apaga as não escolhidas */
+  opacity: 0.3;
   transform: scale(0.95);
   box-shadow: none !important;
 }
 
 .alternativas button.correta {
-  background-color: #00b894 !important; /* Verde vitória */
+  background-color: #00b894 !important;
   box-shadow: 0 0 30px #00b894, 0 6px 0 #008f72 !important;
   opacity: 1 !important;
   transform: scale(1.05) !important;
@@ -106,13 +108,12 @@ button:disabled {
 }
 
 .alternativas button.errada {
-  background-color: #636e72 !important; /* Cinza escuro erro */
+  background-color: #636e72 !important;
   box-shadow: none !important;
   opacity: 1 !important;
   animation: shake 0.5s;
 }
 
-/* Responsividade: Celular vira lista */
 @media (max-width: 700px) {
   .alternativas {
     grid-template-columns: 1fr;

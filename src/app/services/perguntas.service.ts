@@ -46,6 +46,8 @@ export class PerguntasService {
 
   iniciar(jogadorNome?: string) {
     if (jogadorNome) this.jogador.set(jogadorNome);
+    
+    // RESET OBRIGATÓRIO
     this.pontuacao.set(0);
     this.perguntaAtual.set(0);
   }
