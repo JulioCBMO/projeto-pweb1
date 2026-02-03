@@ -2,30 +2,51 @@
   <div class="card">
     <h1 class="title">QUIZZGAME</h1>
 
+    <div class="modo-toggle">
+      <button 
+        type="button"
+        (click)="toggleModo()"
+        class="toggle-btn"
+        [class.active]="!modoAdmin()">
+        👤 Usuário
+      </button>
+      <button 
+        type="button"
+        (click)="toggleModo()"
+        class="toggle-btn"
+        [class.active]="modoAdmin()">
+        🔑 Admin
+      </button>
+    </div>
+
     <form [formGroup]="form" (ngSubmit)="start()">
       <input
         type="text"
-        placeholder="Digite seu nome..."
+        [placeholder]="modoAdmin() ? 'Digite a senha de admin...' : 'Digite seu nome...'"
+        [type]="modoAdmin() ? 'password' : 'text'"
         formControlName="player"
         class="input"
       />
 
-      <!-- Mensagens de erro de validação -->
       <div class="error-messages" *ngIf="form.get('player')?.touched && form.get('player')?.invalid">
         <div class="error" *ngIf="form.get('player')?.errors?.['required']">
-          ⚠️ O nome é obrigatório.
+          ⚠️ {{ modoAdmin() ? 'A senha é obrigatória' : 'O nome é obrigatório' }}.
         </div>
         <div class="error" *ngIf="form.get('player')?.errors?.['minlength']">
-          ⚠️ O nome deve ter no mínimo 2 letras.
+          ⚠️ Deve ter no mínimo 2 caracteres.
         </div>
         <div class="error" *ngIf="form.get('player')?.errors?.['specialCharacters']">
-          ⚠️ O nome não pode conter caracteres especiais (!@#$%^&*...).
+          ⚠️ Não pode conter caracteres especiais (!@#$%^&*...).
         </div>
       </div>
 
       <button class="btn" type="submit" [disabled]="form.invalid">
-        COMEÇAR
+        {{ modoAdmin() ? 'ENTRAR COMO ADMIN' : 'COMEÇAR QUIZ' }}
       </button>
+
+      <p class="hint" *ngIf="modoAdmin()">
+        
+      </p>
     </form>
   </div>
 </div>

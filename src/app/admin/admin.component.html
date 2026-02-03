@@ -1,0 +1,207 @@
+<div class="admin-container">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2>🎮 QUIZ ADMIN</h2>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button 
+        (click)="irParaLista()"
+        [class.active]="telaAtiva() === 'lista'"
+        class="nav-btn">
+         Lista de Perguntas
+      </button>
+      
+      <button 
+        (click)="irParaCriar()"
+        [class.active]="telaAtiva() === 'criar'"
+        class="nav-btn">
+         Nova Pergunta
+      </button>
+
+      <div class="stats">
+        <p>Total de Perguntas:</p>
+        <h3>{{ adminService.perguntas().length }}</h3>
+      </div>
+    </nav>
+
+    <button (click)="logout()" class="logout-btn">
+       Sair
+    </button>
+  </aside>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="main-content">
+    
+    <!-- MENSAGEM DE FEEDBACK -->
+    @if (adminService.mensagem()) {
+      <div class="alert">
+        {{ adminService.mensagem() }}
+      </div>
+    }
+
+    <!-- LOADING -->
+    @if (adminService.carregando()) {
+      <div class="loading">Carregando...</div>
+    }
+
+    <!-- LISTA DE PERGUNTAS -->
+    @if (telaAtiva() === 'lista') {
+      <div class="lista-perguntas">
+        <h1> Gerenciar Perguntas</h1>
+
+        @for (pergunta of adminService.perguntas(); track pergunta.id) {
+          <div class="pergunta-card">
+            <div class="pergunta-header">
+              <h3>{{ pergunta.texto }}</h3>
+              <div class="acoes">
+                <button (click)="irParaEditar(pergunta)" class="btn-editar">
+                    Editar
+                </button>
+                <button (click)="deletarPergunta(pergunta.id!)" class="btn-deletar">
+                    Deletar
+                </button>
+              </div>
+            </div>
+            <div class="alternativas-preview">
+              @for (alt of pergunta.alternativas; track $index) {
+                <span 
+                  class="alt-badge"
+                  [class.correta]="$index === pergunta.correta">
+                  {{ alt }}
+                </span>
+              }
+            </div>
+          </div>
+        }
+
+        @if (adminService.perguntas().length === 0) {
+          <div class="vazio">
+            <p>Nenhuma pergunta cadastrada.</p>
+            <button (click)="irParaCriar()" class="btn-primary">
+              Criar Primeira Pergunta
+            </button>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- FORMULÁRIO: CRIAR -->
+    @if (telaAtiva() === 'criar') {
+      <div class="form-container">
+        <h1>Nova Pergunta</h1>
+
+        <div class="form-group">
+          <label>Texto da Pergunta:</label>
+          <textarea
+            [ngModel]="texto()"
+            (ngModelChange)="texto.set($event)"
+            placeholder="Digite a pergunta..."
+            rows="3"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Alternativas:</label>
+          @for (alt of alternativas(); track $index) {
+            <div class="alternativa-input">
+              <input
+                type="text"
+                [ngModel]="alternativas()[$index]"
+                (ngModelChange)="atualizarAlternativa($index, $event)"
+                [placeholder]="'Alternativa ' + ($index + 1)"
+              />
+              <input
+                type="radio"
+                name="correta"
+                [value]="$index"
+                [checked]="correta() === $index"
+                (change)="correta.set($index)"
+              />
+              <label>Correta</label>
+            </div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>URL da Imagem (opcional):</label>
+          <input
+            type="text"
+            [ngModel]="imagem()"
+            (ngModelChange)="imagem.set($event)"
+            placeholder="https://..."
+          />
+        </div>
+
+        <div class="form-actions">
+          <button (click)="irParaLista()" class="btn-secondary">
+            Cancelar
+          </button>
+          <button (click)="salvarNova()" class="btn-primary">
+             Salvar Pergunta
+          </button>
+        </div>
+      </div>
+    }
+
+    <!-- FORMULÁRIO: EDITAR -->
+    @if (telaAtiva() === 'editar') {
+      <div class="form-container">
+        <h1> Editar Pergunta</h1>
+
+        <div class="form-group">
+          <label>Texto da Pergunta:</label>
+          <textarea
+            [ngModel]="texto()"
+            (ngModelChange)="texto.set($event)"
+            placeholder="Digite a pergunta..."
+            rows="3"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Alternativas:</label>
+          @for (alt of alternativas(); track $index) {
+            <div class="alternativa-input">
+              <input
+                type="text"
+                [ngModel]="alternativas()[$index]"
+                (ngModelChange)="atualizarAlternativa($index, $event)"
+                [placeholder]="'Alternativa ' + ($index + 1)"
+              />
+              <input
+                type="radio"
+                name="correta"
+                [value]="$index"
+                [checked]="correta() === $index"
+                (change)="correta.set($index)"
+              />
+              <label>Correta</label>
+            </div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>URL da Imagem (opcional):</label>
+          <input
+            type="text"
+            [ngModel]="imagem()"
+            (ngModelChange)="imagem.set($event)"
+            placeholder="https://..."
+          />
+        </div>
+
+        <div class="form-actions">
+          <button (click)="irParaLista()" class="btn-secondary">
+            Cancelar
+          </button>
+          <button (click)="salvarEdicao()" class="btn-primary">
+             Salvar Alterações
+          </button>
+        </div>
+      </div>
+    }
+
+  </main>
+</div>

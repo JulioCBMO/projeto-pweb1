@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { PerguntasService } from '../services/perguntas.service'; // <--- Importação essencial
+import { PerguntasService } from '../services/perguntas.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -13,11 +14,13 @@ import { PerguntasService } from '../services/perguntas.service'; // <--- Import
 })
 export class Home {
   form: FormGroup;
+  modoAdmin = signal(false);
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private perguntasService: PerguntasService 
+    private perguntasService: PerguntasService,
+    private authService: AuthService
   ) {
     this.form = this.fb.group({
       player: ['', [
@@ -31,10 +34,7 @@ export class Home {
   noSpecialCharactersValidator() {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = control.value;
-      if (!value) {
-        return null;
-      }
-      // Regex: permite apenas letras (maiúsculas e minúsculas), números e espaços
+      if (!value) return null;
       const pattern = /^[a-zA-Z0-9\s]*$/;
       if (!pattern.test(value)) {
         return { specialCharacters: true };
@@ -43,15 +43,32 @@ export class Home {
     };
   }
 
+  toggleModo() {
+    this.modoAdmin.update(v => !v);
+    this.form.reset();
+  }
+
   start() {
-    if (this.form.valid) {
-      const name = this.form.value.player;
-      
-      this.perguntasService.iniciar(name);
-      
-      this.router.navigate(['/perguntas']);
-    } else {
+    if (this.form.invalid) {
       this.form.markAllAsTouched();
+      return;
+    }
+
+    const valor = this.form.value.player;
+
+    if (this.modoAdmin()) {
+      // Login como Admin
+      if (this.authService.loginAsAdmin(valor)) {
+        this.router.navigate(['/admin']);
+      } else {
+        alert('Senha incorreta! Use: admin123');
+      }
+    } else {
+      // Login como Usuário
+      if (this.authService.loginAsUser(valor)) {
+        this.perguntasService.iniciar(valor);
+        this.router.navigate(['/perguntas']);
+      }
     }
   }
 }
