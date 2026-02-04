@@ -10,7 +10,7 @@ import { Pergunta } from '../models/pergunta.model';
 export class PerguntasService {
 
   private readonly API_URL =
-    `${environment.apiBaseUrl}/api/perguntas`;
+    `https://opulent-train-4jj79rr74qw52qqrw-8080.app.github.dev/api/perguntas`;
 
   perguntas = signal<Pergunta[]>([]);
   perguntaAtual = signal(0);

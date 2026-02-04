@@ -22,7 +22,7 @@ export class AdminComponent {
 
   // Form (signals — usados no HTML)
   texto = signal('');
-  categoria = signal('');
+  categoria = signal<string[]>([]);
   dificuldade = signal('');
   alternativas = signal<string[]>(['', '', '', '']);
   correta = signal(0);
@@ -51,7 +51,7 @@ export class AdminComponent {
     this.perguntaSelecionada.set(pergunta);
 
     this.texto.set(pergunta.texto);
-    this.categoria.set(pergunta.categoria ?? '');
+    this.categoria.set(pergunta.categoria ?? []);
     this.dificuldade.set(pergunta.dificuldade ?? '');
     this.alternativas.set([...pergunta.alternativas]);
     this.correta.set(pergunta.correta);
@@ -67,9 +67,9 @@ export class AdminComponent {
 
     const nova: Pergunta = {
       texto: this.texto(),
-      categoria: this.categoria(),
+      categoria: this.categoria()|| null,
       dificuldade: this.dificuldade() || null,
-      alternativas: this.alternativas() || null,
+      alternativas: this.alternativas(),
       correta: this.correta(),
       imagem: this.imagem() || null
     };
@@ -111,7 +111,7 @@ export class AdminComponent {
 
   limparForm() {
     this.texto.set('');
-    this.categoria.set('');
+    this.categoria.set([]);
     this.dificuldade.set('');
     this.alternativas.set(['', '', '', '']);
     this.correta.set(0);

@@ -9,10 +9,10 @@ import { Pergunta } from '../models/pergunta.model';
 export class AdminService {
 
   private readonly API_PERGUNTAS =
-    `${environment.apiBaseUrl}/api/perguntas`;
+    `https://opulent-train-4jj79rr74qw52qqrw-8080.app.github.dev/api/perguntas`;
 
   private readonly API_CONSULTAS =
-    `${environment.apiBaseUrl}/api/consultas`;
+    `https://opulent-train-4jj79rr74qw52qqrw-8080.app.github.dev/api/consultas`;
 
   perguntas = signal<Pergunta[]>([]);
   carregando = signal(false);
