@@ -1,42 +1,25 @@
 <div class="container">
   @if (service.perguntas().length > 0) {
-    
     <div class="quiz-card">
       <h2>PERGUNTA {{ service.perguntaAtual() + 1 }} / {{ service.perguntas().length }}</h2>
 
-      @if (perguntaAtual().imagem) {
-        <img 
-          [src]="perguntaAtual().imagem" 
-          alt="Imagem da pergunta" 
-          class="imagem-pergunta"
-        />
+      @if (perguntaAtual()?.imagem) {
+        <img [src]="perguntaAtual()?.imagem" alt="Imagem" class="imagem-pergunta" />
       }
 
-      <p class="texto">{{ perguntaAtual().enunciado }}</p>
+      <p class="texto">{{ perguntaAtual()?.texto }}</p>
 
       <div class="alternativas">
-        @for (alt of perguntaAtual().alternativas; track $index) {
-          <button
-            (click)="escolherAlternativa($index)"
-            [class.correta]="selecionada !== null && $index === correta"
-            [class.errada]="selecionada !== null && $index === selecionada && selecionada !== correta"
-            [class.inativo]="selecionada !== null && $index !== selecionada && $index !== correta"
-            [disabled]="selecionada !== null"
-          >
+        @for (alt of perguntaAtual()?.alternativas; track $index) {
+          <button (click)="escolherAlternativa($index)">
             {{ alt }}
           </button>
         }
       </div>
     </div>
-
   } @else {
     <div class="loading">
-      <p>Carregando perguntas...</p>
-      @if (!service.carregando() && service.perguntas().length === 0) {
-        <p style="font-size: 0.8rem; color: #ff4757; margin-top: 10px;">
-          Erro: Nenhuma pergunta encontrada. Verifique a conexão com o backend.
-        </p>
-      }
+      <p>Carregando perguntas do servidor Java...</p>
     </div>
   }
 </div>

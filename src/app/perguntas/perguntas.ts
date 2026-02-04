@@ -7,7 +7,7 @@ import { PerguntasService } from '../services/perguntas.service';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './perguntas.html',
-  styleUrls: ['./perguntas.css'],
+  styleUrl: './perguntas.css',
 })
 export class PerguntasComponent {
   service = inject(PerguntasService);
@@ -15,17 +15,18 @@ export class PerguntasComponent {
   perguntaAtual = computed(() => {
     const lista = this.service.perguntas();
     const idx = this.service.perguntaAtual();
-    return lista[idx];
+    return lista.length > 0 ? lista[idx] : null;
   });
 
   selecionada: number | null = null;
   correta: number | null = null;
 
   escolherAlternativa(indiceEscolhido: number) {
-    if (this.selecionada !== null) return;
+    const pergunta = this.perguntaAtual();
+    if (this.selecionada !== null || !pergunta) return;
 
     this.selecionada = indiceEscolhido;
-    this.correta = this.perguntaAtual().correta;
+    this.correta = pergunta.correta; 
 
     setTimeout(() => {
       this.service.responder(indiceEscolhido);

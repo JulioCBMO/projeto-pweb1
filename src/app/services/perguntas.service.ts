@@ -8,8 +8,7 @@ import { Pergunta } from '../models/pergunta.model';
   providedIn: 'root'
 })
 export class PerguntasService {
-  private readonly API_URL = 'http://localhost:8080/api/consultas/perguntas';
-
+private readonly API_URL = 'http://localhost:8080/api/consultas';
   perguntas: WritableSignal<Pergunta[]> = signal([]);
   perguntaAtual: WritableSignal<number> = signal(0);
   pontuacao: WritableSignal<number> = signal(0);
