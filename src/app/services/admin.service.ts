@@ -39,7 +39,7 @@ export class AdminService {
 
   async criar(pergunta: Pergunta): Promise<boolean> {
     try {
-      // O Java espera 'texto' em vez de 'enunciado', garanta que o model está correto
+    
       const nova = await lastValueFrom(
         this.http.post<Pergunta>(this.API_PERGUNTAS, pergunta)
       );
