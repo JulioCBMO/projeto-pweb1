@@ -1,8 +1,8 @@
 export interface Pergunta {
   id?: number;
   texto: string;
-  categoria: string | null;
-  dificuldade: string | null;
+  categoria: string;
+  dificuldade: string;
   alternativas: string[];
   correta: number;
   imagem?: string | null;

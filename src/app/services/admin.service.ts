@@ -2,7 +2,6 @@ import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import { Pergunta } from '../models/pergunta.model';
-import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,10 +9,10 @@ import { environment } from '../../environments/environment';
 export class AdminService {
 
   private readonly API_PERGUNTAS =
-    `https://opulent-train-4jj79rr74qw52qqrw-8080.app.github.dev/api/perguntas`;
+    `${environment.apiBaseUrl}/api/perguntas`;
 
   private readonly API_CONSULTAS =
-    `https://opulent-train-4jj79rr74qw52qqrw-8080.app.github.dev/api/consultas`;
+    `${environment.apiBaseUrl}/api/consultas`;
 
   perguntas = signal<Pergunta[]>([]);
   carregando = signal(false);
@@ -28,6 +27,8 @@ export class AdminService {
         this.http.get<Pergunta[]>(this.API_PERGUNTAS)
       );
       this.perguntas.set(data || []);
+    } catch (error) {
+      console.error('Erro ao carregar perguntas no admin:', error);
     } finally {
       this.carregando.set(false);
     }
@@ -35,12 +36,14 @@ export class AdminService {
 
   async criar(pergunta: Pergunta): Promise<boolean> {
     try {
+    
       const nova = await lastValueFrom(
         this.http.post<Pergunta>(this.API_PERGUNTAS, pergunta)
       );
       this.perguntas.update(l => [...l, nova]);
       return true;
-    } catch {
+    } catch (error) {
+      console.error('Erro ao criar pergunta:', error);
       return false;
     }
   }
