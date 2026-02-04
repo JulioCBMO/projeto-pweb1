@@ -8,7 +8,7 @@ import { Pergunta } from '../models/pergunta.model';
   providedIn: 'root'
 })
 export class PerguntasService {
-private readonly API_URL = 'https://fluffy-trout-x5vg6wgvgrvc6v-8080.app.github.dev/api/consultas/perguntas'; 
+private readonly API_URL = 'https://ideal-telegram-g4qwp6pxpjvpfpg9-8080.app.github.dev/api/consultas/perguntas'; 
  perguntas: WritableSignal<Pergunta[]> = signal([]);
   perguntaAtual: WritableSignal<number> = signal(0);
   pontuacao: WritableSignal<number> = signal(0);

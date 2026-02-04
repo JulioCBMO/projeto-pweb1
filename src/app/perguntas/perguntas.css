@@ -131,3 +131,45 @@ button:disabled {
   50% { transform: scale(1.1); }
   100% { transform: scale(1.05); }
 }
+
+/* Estilos para os botões de alternativa */
+.alternativas button {
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+/* Acertou: Fica verde e pula (animação legal) */
+.alternativas button.correta {
+  background-color: #2ecc71 !important;
+  color: white !important;
+  border-color: #27ae60;
+  animation: pulse-green 0.5s ease-in-out;
+}
+
+/* Errou: A selecionada fica vermelha e treme */
+.alternativas button.errada {
+  background-color: #e74c3c !important;
+  color: white !important;
+  border-color: #c0392b;
+  animation: shake 0.4s ease-in-out;
+}
+
+/* Animação de pulo para acerto */
+@keyframes pulse-green {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Animação de tremer para erro */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* Deixar os outros botões opacos enquanto mostra o resultado */
+.alternativas button.inativo {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

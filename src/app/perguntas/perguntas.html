@@ -11,7 +11,13 @@
 
       <div class="alternativas">
         @for (alt of perguntaAtual()?.alternativas; track $index) {
-          <button (click)="escolherAlternativa($index)">
+          <button
+            (click)="escolherAlternativa($index)"
+            [class.correta]="selecionada !== null && $index === correta"
+            [class.errada]="selecionada !== null && $index === selecionada && selecionada !== correta"
+            [class.inativo]="selecionada !== null && $index !== selecionada && $index !== correta"
+            [disabled]="selecionada !== null"
+          >
             {{ alt }}
           </button>
         }

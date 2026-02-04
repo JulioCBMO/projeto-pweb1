@@ -2,18 +2,20 @@ import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import { Pergunta } from '../models/pergunta.model';
-import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminService {
 
-  private readonly API_PERGUNTAS =
-    `${environment.apiBaseUrl}/api/perguntas`;
+  // Novo link do seu Codespaces
+  private readonly BASE_URL = 'https://ideal-telegram-g4qwp6pxpjvpfpg9-8080.app.github.dev';
 
-  private readonly API_CONSULTAS =
-    `${environment.apiBaseUrl}/api/consultas`;
+  // Endpoint do Módulo 1 (Criação/Edição)
+  private readonly API_PERGUNTAS = `${this.BASE_URL}/api/perguntas`;
+
+  // Endpoint do Módulo 2 (Listagem de Consultas)
+  private readonly API_CONSULTAS = `${this.BASE_URL}/api/consultas/perguntas`;
 
   perguntas = signal<Pergunta[]>([]);
   carregando = signal(false);
@@ -28,6 +30,8 @@ export class AdminService {
         this.http.get<Pergunta[]>(this.API_CONSULTAS)
       );
       this.perguntas.set(data || []);
+    } catch (error) {
+      console.error('Erro ao carregar perguntas no admin:', error);
     } finally {
       this.carregando.set(false);
     }
@@ -35,12 +39,14 @@ export class AdminService {
 
   async criar(pergunta: Pergunta): Promise<boolean> {
     try {
+      // O Java espera 'texto' em vez de 'enunciado', garanta que o model está correto
       const nova = await lastValueFrom(
         this.http.post<Pergunta>(this.API_PERGUNTAS, pergunta)
       );
       this.perguntas.update(l => [...l, nova]);
       return true;
-    } catch {
+    } catch (error) {
+      console.error('Erro ao criar pergunta:', error);
       return false;
     }
   }
