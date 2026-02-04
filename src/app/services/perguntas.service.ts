@@ -8,8 +8,8 @@ import { Pergunta } from '../models/pergunta.model';
   providedIn: 'root'
 })
 export class PerguntasService {
-private readonly API_URL = 'http://localhost:8080/api/consultas';
-  perguntas: WritableSignal<Pergunta[]> = signal([]);
+private readonly API_URL = 'https://fluffy-trout-x5vg6wgvgrvc6v-8080.app.github.dev/api/consultas/perguntas'; 
+ perguntas: WritableSignal<Pergunta[]> = signal([]);
   perguntaAtual: WritableSignal<number> = signal(0);
   pontuacao: WritableSignal<number> = signal(0);
   jogador: WritableSignal<string | null> = signal(null);
