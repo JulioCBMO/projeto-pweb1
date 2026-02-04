@@ -1,7 +1,8 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+
 import { AdminService } from '../services/admin.service';
 import { AuthService } from '../services/auth.service';
 import { Pergunta } from '../models/pergunta.model';
@@ -13,14 +14,17 @@ import { Pergunta } from '../models/pergunta.model';
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.css']
 })
-export class AdminComponent implements OnInit {
-  // Estado da UI
+export class AdminComponent {
+
+  // UI
   telaAtiva = signal<'lista' | 'criar' | 'editar'>('lista');
   perguntaSelecionada = signal<Pergunta | null>(null);
-  
-  // Form data
+
+  // Form (signals — usados no HTML)
   texto = signal('');
-  alternativas = signal(['', '', '', '']);
+  categoria = signal('');
+  dificuldade = signal('');
+  alternativas = signal<string[]>(['', '', '', '']);
   correta = signal(0);
   imagem = signal('');
 
@@ -29,14 +33,6 @@ export class AdminComponent implements OnInit {
     private authService: AuthService,
     private router: Router
   ) {}
-
-  ngOnInit() {
-    if (!this.authService.isAdmin()) {
-      this.router.navigate(['/']);
-      return;
-    }
-    this.adminService.carregarPerguntas();
-  }
 
   // Navegação
   irParaLista() {
@@ -52,63 +48,70 @@ export class AdminComponent implements OnInit {
   irParaEditar(pergunta: Pergunta) {
     this.telaAtiva.set('editar');
     this.perguntaSelecionada.set(pergunta);
+
     this.texto.set(pergunta.texto);
+    this.categoria.set(pergunta.categoria);
+    this.dificuldade.set(pergunta.dificuldade);
     this.alternativas.set([...pergunta.alternativas]);
     this.correta.set(pergunta.correta);
-    this.imagem.set(pergunta.imagem || '');
+    this.imagem.set(pergunta.imagem ?? '');
   }
 
-  // CRUD Operations
+  // CRUD
   async salvarNova() {
     if (!this.validarForm()) {
-      alert('Preencha todos os campos corretamente!');
+      alert('Preencha os campos corretamente!');
       return;
     }
 
-    const novaPergunta: Pergunta = {
+    const nova: Pergunta = {
       texto: this.texto(),
-      alternativas: this.alternativas().filter(a => a.trim() !== ''),
+      categoria: this.categoria(),
+      dificuldade: this.dificuldade(),
+      alternativas: this.alternativas(),
       correta: this.correta(),
       imagem: this.imagem() || null
     };
 
-    const sucesso = await this.adminService.criar(novaPergunta);
-    if (sucesso) {
-      this.irParaLista();
-    }
+    const ok = await this.adminService.criar(nova);
+    if (ok) this.irParaLista();
   }
 
   async salvarEdicao() {
     const pergunta = this.perguntaSelecionada();
-    
-    if (!pergunta || !this.validarForm()) {
-      alert('Erro na validação!');
-      return;
-    }
+    if (!pergunta || !this.validarForm()) return;
 
     const atualizada: Pergunta = {
       id: pergunta.id,
       texto: this.texto(),
-      alternativas: this.alternativas().filter(a => a.trim() !== ''),
+      categoria: this.categoria(),
+      dificuldade: this.dificuldade(),
+      alternativas: this.alternativas(),
       correta: this.correta(),
       imagem: this.imagem() || null
     };
 
-    const sucesso = await this.adminService.atualizar(pergunta.id!, atualizada);
-    if (sucesso) {
-      this.irParaLista();
-    }
+    const ok = await this.adminService.atualizar(pergunta.id!, atualizada);
+    if (ok) this.irParaLista();
   }
 
   async deletarPergunta(id: number) {
-    if (confirm('Tem certeza que deseja deletar esta pergunta?')) {
+    if (confirm('Deseja excluir esta pergunta?')) {
       await this.adminService.deletar(id);
     }
   }
 
   // Helpers
+  atualizarAlternativa(index: number, valor: string) {
+    const copia = [...this.alternativas()];
+    copia[index] = valor;
+    this.alternativas.set(copia);
+  }
+
   limparForm() {
     this.texto.set('');
+    this.categoria.set('');
+    this.dificuldade.set('');
     this.alternativas.set(['', '', '', '']);
     this.correta.set(0);
     this.imagem.set('');
@@ -116,17 +119,10 @@ export class AdminComponent implements OnInit {
   }
 
   validarForm(): boolean {
-    if (!this.texto() || this.texto().trim().length < 10) return false;
-    const altsValidas = this.alternativas().filter(a => a.trim() !== '');
-    if (altsValidas.length < 2) return false;
-    if (this.correta() < 0 || this.correta() >= altsValidas.length) return false;
+    if (this.texto().trim().length < 10) return false;
+    if (!this.categoria() || !this.dificuldade()) return false;
+    if (this.alternativas().filter(a => a.trim()).length < 2) return false;
     return true;
-  }
-
-  atualizarAlternativa(index: number, valor: string) {
-    const novasAlts = [...this.alternativas()];
-    novasAlts[index] = valor;
-    this.alternativas.set(novasAlts);
   }
 
   logout() {

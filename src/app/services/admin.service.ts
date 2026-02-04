@@ -2,13 +2,19 @@ import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import { Pergunta } from '../models/pergunta.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminService {
-  private readonly API_URL = 'http://localhost:8080/api/perguntas';
-  
+
+  private readonly API_PERGUNTAS =
+    `${environment.apiBaseUrl}/api/perguntas`;
+
+  private readonly API_CONSULTAS =
+    `${environment.apiBaseUrl}/api/consultas`;
+
   perguntas = signal<Pergunta[]>([]);
   carregando = signal(false);
   mensagem = signal('');
@@ -19,70 +25,49 @@ export class AdminService {
     this.carregando.set(true);
     try {
       const data = await lastValueFrom(
-        this.http.get<Pergunta[]>('http://localhost:8080/api/consultas')
+        this.http.get<Pergunta[]>(this.API_CONSULTAS)
       );
       this.perguntas.set(data || []);
-    } catch (err) {
-      console.error('Erro ao carregar perguntas:', err);
-      this.mensagem.set('Erro ao carregar perguntas');
     } finally {
       this.carregando.set(false);
     }
   }
 
   async criar(pergunta: Pergunta): Promise<boolean> {
-    this.carregando.set(true);
     try {
       const nova = await lastValueFrom(
-        this.http.post<Pergunta>(this.API_URL, pergunta)
+        this.http.post<Pergunta>(this.API_PERGUNTAS, pergunta)
       );
-      this.perguntas.update(lista => [...lista, nova]);
-      this.mensagem.set('Pergunta criada com sucesso!');
+      this.perguntas.update(l => [...l, nova]);
       return true;
-    } catch (err) {
-      console.error('Erro ao criar pergunta:', err);
-      this.mensagem.set('Erro ao criar pergunta');
+    } catch {
       return false;
-    } finally {
-      this.carregando.set(false);
     }
   }
 
   async atualizar(id: number, pergunta: Pergunta): Promise<boolean> {
-    this.carregando.set(true);
     try {
       const atualizada = await lastValueFrom(
-        this.http.put<Pergunta>(`${this.API_URL}/${id}`, pergunta)
+        this.http.put<Pergunta>(`${this.API_PERGUNTAS}/${id}`, pergunta)
       );
-      this.perguntas.update(lista => 
-        lista.map(p => p.id === id ? atualizada : p)
+      this.perguntas.update(l =>
+        l.map(p => p.id === id ? atualizada : p)
       );
-      this.mensagem.set('Pergunta atualizada com sucesso!');
       return true;
-    } catch (err) {
-      console.error('Erro ao atualizar pergunta:', err);
-      this.mensagem.set('Erro ao atualizar pergunta');
+    } catch {
       return false;
-    } finally {
-      this.carregando.set(false);
     }
   }
 
   async deletar(id: number): Promise<boolean> {
-    this.carregando.set(true);
     try {
       await lastValueFrom(
-        this.http.delete(`${this.API_URL}/${id}`)
+        this.http.delete(`${this.API_PERGUNTAS}/${id}`)
       );
-      this.perguntas.update(lista => lista.filter(p => p.id !== id));
-      this.mensagem.set('Pergunta deletada com sucesso!');
+      this.perguntas.update(l => l.filter(p => p.id !== id));
       return true;
-    } catch (err) {
-      console.error('Erro ao deletar pergunta:', err);
-      this.mensagem.set('Erro ao deletar pergunta');
+    } catch {
       return false;
-    } finally {
-      this.carregando.set(false);
     }
   }
 }
