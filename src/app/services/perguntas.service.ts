@@ -10,8 +10,7 @@ import { environment } from '../../environments/environment';
 })
 export class PerguntasService {
 
-  private readonly API_URL =
-    `${environment.apiBaseUrl}/api/perguntas`;
+  private readonly API_URL ='https://opulent-train-4jj79rr74qw52qqrw-8080.app.github.dev/api/perguntas';
 
   perguntas = signal<Pergunta[]>([]);
   perguntaAtual = signal(0);

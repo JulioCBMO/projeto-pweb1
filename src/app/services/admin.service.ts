@@ -10,10 +10,10 @@ import { environment } from '../../environments/environment';
 export class AdminService {
 
   private readonly API_PERGUNTAS =
-    `${environment.apiBaseUrl}/api/perguntas`;
+    `https://opulent-train-4jj79rr74qw52qqrw-8080.app.github.dev/api/perguntas`;
 
   private readonly API_CONSULTAS =
-    `${environment.apiBaseUrl}/api/consultas`;
+    `https://opulent-train-4jj79rr74qw52qqrw-8080.app.github.dev/api/consultas`;
 
   perguntas = signal<Pergunta[]>([]);
   carregando = signal(false);
@@ -25,7 +25,7 @@ export class AdminService {
     this.carregando.set(true);
     try {
       const data = await lastValueFrom(
-        this.http.get<Pergunta[]>(this.API_CONSULTAS)
+        this.http.get<Pergunta[]>(this.API_PERGUNTAS)
       );
       this.perguntas.set(data || []);
     } finally {

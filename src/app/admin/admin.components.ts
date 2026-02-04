@@ -32,7 +32,8 @@ export class AdminComponent {
     public adminService: AdminService,
     private authService: AuthService,
     private router: Router
-  ) {}
+    
+  ) {this.adminService.carregarPerguntas();}
 
   // Navegação
   irParaLista() {
@@ -50,8 +51,8 @@ export class AdminComponent {
     this.perguntaSelecionada.set(pergunta);
 
     this.texto.set(pergunta.texto);
-    this.categoria.set(pergunta.categoria);
-    this.dificuldade.set(pergunta.dificuldade);
+    this.categoria.set(pergunta.categoria ?? '');
+    this.dificuldade.set(pergunta.dificuldade ?? '');
     this.alternativas.set([...pergunta.alternativas]);
     this.correta.set(pergunta.correta);
     this.imagem.set(pergunta.imagem ?? '');
@@ -67,8 +68,8 @@ export class AdminComponent {
     const nova: Pergunta = {
       texto: this.texto(),
       categoria: this.categoria(),
-      dificuldade: this.dificuldade(),
-      alternativas: this.alternativas(),
+      dificuldade: this.dificuldade() || null,
+      alternativas: this.alternativas() || null,
       correta: this.correta(),
       imagem: this.imagem() || null
     };
@@ -84,8 +85,8 @@ export class AdminComponent {
     const atualizada: Pergunta = {
       id: pergunta.id,
       texto: this.texto(),
-      categoria: this.categoria(),
-      dificuldade: this.dificuldade(),
+      categoria: this.categoria() || null,
+      dificuldade: this.dificuldade() || null,
       alternativas: this.alternativas(),
       correta: this.correta(),
       imagem: this.imagem() || null
@@ -120,7 +121,6 @@ export class AdminComponent {
 
   validarForm(): boolean {
     if (this.texto().trim().length < 10) return false;
-    if (!this.categoria() || !this.dificuldade()) return false;
     if (this.alternativas().filter(a => a.trim()).length < 2) return false;
     return true;
   }
