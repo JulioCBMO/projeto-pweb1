@@ -1,6 +1,6 @@
 export interface Pergunta {
   id?: number;
-  texto: string;
+  enunciado: string; 
   categoria: string;
   dificuldade: string;
   alternativas: string[];

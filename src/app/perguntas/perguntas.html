@@ -12,7 +12,7 @@
         />
       }
 
-      <p class="texto">{{ perguntaAtual().texto }}</p>
+      <p class="texto">{{ perguntaAtual().enunciado }}</p>
 
       <div class="alternativas">
         @for (alt of perguntaAtual().alternativas; track $index) {
